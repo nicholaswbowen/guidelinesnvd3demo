@@ -1,0 +1,20 @@
+{
+  "name": "nvd3demo",
+  "version": "0.0.1",
+  "description": "Nvd3 stacked/grouped multi-bar chart",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nicholas Bowen",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-preset-es2015": "^6.22.0",
+    "d3": "^3.5.4",
+    "d3-tip": "^0.7.1",
+    "nvd3": "^1.8.5"
+  }
+}
