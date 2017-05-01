@@ -4,7 +4,8 @@
   "description": "Nvd3 stacked/grouped multi-bar chart",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build" : "babel index.babel --out-file index.js"
   },
   "author": "Nicholas Bowen",
   "license": "ISC",
