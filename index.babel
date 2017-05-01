@@ -10,7 +10,7 @@ function addGuides(chartElement,axisScale,axisName){
     <span style='color:red'>${d.mean}</span>
     </div>`;
   })
-  let boundingBox = d3.select(".nvd3.nv-wrap.nv-multiBarWithLegend g")[0][0]
+  let boundingBox = d3.select(chartElement)[0][0]
                     .getBBox();
   findMeans(dataSet, axisName)
     .then((means) => {
@@ -18,8 +18,9 @@ function addGuides(chartElement,axisScale,axisName){
       let axisElement;
       if (axisName === "x"){
         attrJSON =
-        { "x" : (d) =>  {return axisScale()(d.mean)},
+        { "x" : 0,
           "y" : 0,
+          "transform": (d) =>  {return `translate( ${axisScale()(Math.round(d.mean))}, 0 ) `},
           "width": "1px",
           "height": boundingBox.height,
           "class": "my-guide-lines"}
@@ -31,7 +32,6 @@ function addGuides(chartElement,axisScale,axisName){
           "height": "1px",
           "class": "my-guide-lines"}
       }
-
     d3.select(chartElement)
         .call(tip)
         .append('g')
@@ -43,16 +43,6 @@ function addGuides(chartElement,axisScale,axisName){
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
     })
-    //"class": "myGuidelines"
-    let guidelines = d3.selectAll('.my-guide-lines')[0];
-    console.log(d3.selectAll('.my-guide-lines'))
-    d3.selectAll('.nv-bar')[0]
-      .filter((d) => {
-        return guidelines.some((guidline) => {
-          guidline.getBoundingClientRect().left() === d.getBoundingClientRect().left();
-        })
-      })
-
 }
 nv.addGraph(function() {
   let svg = d3.select('#graphsvg');
@@ -87,6 +77,7 @@ function findMeans(dataSet,axis){
       })
       return {mean: total/stream.values.length, key: stream.key};
     })
+    console.log(result);
     resolve(result);
   })
 

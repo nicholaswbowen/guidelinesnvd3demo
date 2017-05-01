@@ -6,15 +6,16 @@ function addGuides(chartElement, axisScale, axisName) {
   var tip = d3.tip().attr('class', 'd3-tip').offset([-10, 0]).html(function (d) {
     return '<div style=\'background-color: lightblue\'>\n    <strong>Mean of ' + d.key + ':</strong>\n    <span style=\'color:red\'>' + d.mean + '</span>\n    </div>';
   });
-  var boundingBox = d3.select(".nvd3.nv-wrap.nv-multiBarWithLegend g")[0][0].getBBox();
+  var boundingBox = d3.select(chartElement)[0][0].getBBox();
   findMeans(dataSet, axisName).then(function (means) {
     var attrJSON = void 0;
     var axisElement = void 0;
     if (axisName === "x") {
-      attrJSON = { "x": function x(d) {
-          return axisScale()(d.mean);
-        },
+      attrJSON = { "x": 0,
         "y": 0,
+        "transform": function transform(d) {
+          return 'translate( ' + axisScale()(Math.round(d.mean)) + ', 0 ) ';
+        },
         "width": "1px",
         "height": boundingBox.height,
         "class": "my-guide-lines" };
@@ -27,16 +28,7 @@ function addGuides(chartElement, axisScale, axisName) {
         "height": "1px",
         "class": "my-guide-lines" };
     }
-
     d3.select(chartElement).call(tip).append('g').selectAll('rect').data(means).enter().append('rect').attr(attrJSON).on('mouseover', tip.show).on('mouseout', tip.hide);
-  });
-  //"class": "myGuidelines"
-  var guidelines = d3.selectAll('.my-guide-lines')[0];
-  console.log(d3.selectAll('.my-guide-lines'));
-  d3.selectAll('.nv-bar')[0].filter(function (d) {
-    return guidelines.some(function (guidline) {
-      guidline.getBoundingClientRect().left() === d.getBoundingClientRect().left();
-    });
   });
 }
 nv.addGraph(function () {
@@ -66,6 +58,7 @@ function findMeans(dataSet, axis) {
       });
       return { mean: total / stream.values.length, key: stream.key };
     });
+    console.log(result);
     resolve(result);
   });
 }
